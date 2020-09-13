@@ -25,6 +25,8 @@ function compile_asm_file
 	local no_extension=`echo $1 | cut -d '.' -f 1`
 	local object_file_path=$no_extension.o
 
+	# https://daniellethurow.com/blog/2017/1/29/
+	# 32-bit-assembly-on-a-64-bit-linux-machine
 	nasm -f elf $1 -o $object_file_path
 	ld -m elf_i386 $object_file_path -o $no_extension
 
