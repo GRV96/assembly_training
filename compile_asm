@@ -1,0 +1,41 @@
+#!/bin/bash
+
+function is_asm_file
+{
+	# $1: a filename or file path
+	if [ ! -e $1 ] || [ ! -f $1 ]; then
+		return 1 # false
+	fi
+
+	local no_path=`basename $1`
+	local filename=`echo $no_path | cut -d '.' -f 1`
+	local extension=`echo $no_path | cut -d '.' -f 2`
+
+	# If there is no extension, $filename = $extension.
+	if [ $filename = $extension ] || [ $extension != "asm" ]; then
+		return 1 # false
+	else
+		return 0 # true
+	fi
+}
+
+function compile_asm_file
+{
+	# $1: a filename or file path
+	local no_extension=`echo $1 | cut -d '.' -f 1`
+	local object_file_path=$no_extension.o
+
+	# https://daniellethurow.com/blog/2017/1/29/
+	# 32-bit-assembly-on-a-64-bit-linux-machine
+	nasm -f elf $1 -o $object_file_path
+	ld -m elf_i386 $object_file_path -o $no_extension
+
+	rm $object_file_path
+}
+
+until [ -z $1 ]; do
+	if is_asm_file $1; then
+		compile_asm_file $1
+	fi
+	shift
+done
