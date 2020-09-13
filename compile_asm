@@ -31,6 +31,9 @@ function compile_asm_file
 	rm $object_file_path
 }
 
-if is_asm_file $1; then
-	compile_asm_file $1
-fi
+until [ -z $1 ]; do
+	if is_asm_file $1; then
+		compile_asm_file $1
+	fi
+	shift
+done
