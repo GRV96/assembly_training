@@ -19,12 +19,18 @@ function is_asm_file
 	fi
 }
 
-#function compile_asm_file
-#{
-#}
+function compile_asm_file
+{
+	# $1: a filename or file path
+	local no_extension=`echo $1 | cut -d '.' -f 1`
+	local object_file_path=$no_extension.o
+
+	nasm -f elf $1 -o $object_file_path
+	ld -m elf_i386 $object_file_path -o $no_extension
+
+	rm $object_file_path
+}
 
 if is_asm_file $1; then
-	echo ".asm file!"
-else
-	echo "Wrong extension"
+	compile_asm_file $1
 fi
