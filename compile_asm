@@ -1,0 +1,24 @@
+#!/bin/bash
+
+function is_asm_file
+{
+	if [ ! -e $1 ] || [ ! -f $1 ]; then
+		return 1
+	fi
+
+	local filename=`echo $1 | cut -d '.' -f 1`
+	local extension=`echo $1 |cut -d '.' -f 2`
+
+	# If there is no extension, $filename = $extension.
+	if [ $filename = $extension ] || [ $extension != "asm" ]; then
+		return 1
+	else
+		return 0
+	fi
+}
+
+if is_asm_file $1; then
+	echo ".asm file!"
+else
+	echo "Wrong extension"
+fi
