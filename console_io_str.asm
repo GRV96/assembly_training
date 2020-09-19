@@ -11,8 +11,6 @@ section .data
 
 	OUTPUT_MSG db "You have entered "
 	OUT_MSG_LENGTH equ $-OUTPUT_MSG
-	OUT_MSG_END db ".", 0xA
-	OUT_MSG_END_LENGTH equ $-OUT_MSG_END
 
 section .text
 _start:
@@ -41,12 +39,6 @@ _start:
 	mov ebx, 1
 	mov ecx, a_str
 	mov edx, MAX_STR_LENGTH
-	int 0x80
-
-	mov eax, 4
-	mov ebx, 1
-	mov ecx, OUT_MSG_END
-	mov edx, OUT_MSG_END_LENGTH
 	int 0x80
 
 	; Exit
