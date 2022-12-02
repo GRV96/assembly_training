@@ -8,10 +8,13 @@ section .bss
 	;altitude resw -7
 
 section .data
-	altitude dw 13
+	altitude equ 77
 
 	NEG_ALT_ERR_MSG db "Error: altitude < 0 km", 0xA
 	NEG_ALT_ERR_MSG_LENGTH equ $-NEG_ALT_ERR_MSG
+
+	EXEC_END db "Execution ended.", 0xA
+	EXEC_END_LENGTH equ $-EXEC_END
 
 	NO_ERROR equ 0
 
@@ -60,13 +63,25 @@ _start:
 
 troposphere:
 	mov eax, altitude
-	cmp eax, MESOSPHERE_ALT
-	jg mesosphere
+	cmp eax, STRATOSPHERE_ALT
+	jg stratosphere
 
 	mov eax, SYSCALL_WRITE
 	mov ebx, STDOUT
 	mov ecx, TROPOSPHERE
 	mov edx, TROPOSPHERE_LENGTH
+	int 0x80
+	jmp endif
+
+stratosphere:
+	mov eax, altitude
+	cmp eax, MESOSPHERE_ALT
+	jg mesosphere
+
+	mov eax, SYSCALL_WRITE
+	mov ebx, STDOUT
+	mov ecx, STRATOSPHERE
+	mov edx, STRATOSPHERE_LENGTH
 	int 0x80
 	jmp endif
 
@@ -102,11 +117,11 @@ exosphere:
 	int 0x80
 
 endif:
-;	mov eax, SYSCALL_WRITE
-;	mov ebx, STDOUT
-;	mov ecx, altitude
-;	mov edx, 2 ;ALT_VAR_SIZE
-;	int 0x80
+	mov eax, SYSCALL_WRITE
+	mov ebx, STDOUT
+	mov ecx, EXEC_END
+	mov edx, EXEC_END_LENGTH
+	int 0x80
 
 	; Exit
 	mov eax, SYSCALL_EXIT
