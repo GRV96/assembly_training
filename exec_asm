@@ -8,9 +8,7 @@
 LOCAL_DIR="$(dirname "$(realpath $0)")"
 
 # Path to the executable file
-exec_path=`echo "$1" | cut -d '.' -f 1`
-
-$LOCAL_DIR/compile_asm $1
+exec_path=`$LOCAL_DIR/compile_asm $1`
 
 if [ -e $exec_path ]; then
 	if [ $exec_path = *"/"* ]; then
