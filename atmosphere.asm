@@ -3,13 +3,7 @@
 
 global _start
 
-section .bss
-	; Altitude (km)
-	;altitude resw -7
-
 section .data
-	altitude equ 77
-
 	NEG_ALT_ERR_MSG db "Error: altitude < 0 km", 0xA
 	NEG_ALT_ERR_MSG_LENGTH equ $-NEG_ALT_ERR_MSG
 
@@ -48,8 +42,7 @@ section .data
 
 section .text
 _start:
-	; Comparison
-	mov eax, altitude
+	mov eax, 22 ; altitude (km)
 	cmp eax, TROPOSPHERE_ALT
 	jge troposphere
 
@@ -62,7 +55,6 @@ _start:
 	jmp endif
 
 troposphere:
-	mov eax, altitude
 	cmp eax, STRATOSPHERE_ALT
 	jg stratosphere
 
@@ -74,7 +66,6 @@ troposphere:
 	jmp endif
 
 stratosphere:
-	mov eax, altitude
 	cmp eax, MESOSPHERE_ALT
 	jg mesosphere
 
@@ -86,7 +77,6 @@ stratosphere:
 	jmp endif
 
 mesosphere:
-	mov eax, altitude
 	cmp eax, THERMOSPHERE_ALT
 	jg thermosphere
 
@@ -98,7 +88,6 @@ mesosphere:
 	jmp endif
 
 thermosphere:
-	mov eax, altitude
 	cmp eax, EXOSPHERE_ALT
 	jg exosphere
 
