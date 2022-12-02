@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# This script compiles an assembly source file,
+# runs the executable file and deletes it.
+
+# $1: the path to an assembly source file
+
+LOCAL_DIR="$(dirname "$(realpath $0)")"
+
+# Path to the executable file
+exec_path=`echo "$1" | cut -d '.' -f 1`
+
+$LOCAL_DIR/compile_asm $1
+
+if [ -e $exec_path ]; then
+	if [ $exec_path = *"/"* ]; then
+		cmd=$exec_path
+	else
+		cmd="./"$exec_path
+	fi
+	$cmd
+	rm $exec_path
+fi
