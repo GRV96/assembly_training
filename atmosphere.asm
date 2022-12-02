@@ -4,13 +4,11 @@
 global _start
 
 section .bss
-	altitude resw 1
+	; Altitude (km)
+	;altitude resw -7
 
 section .data
-	ALT_VAR_SIZE equ 2
-
-	ALTITUDE_MSG db "Altitude (km): "
-	ALTITUDE_MSG_LENGTH equ $-ALTITUDE_MSG
+	altitude dw 13
 
 	NEG_ALT_ERR_MSG db "Error: altitude < 0 km", 0xA
 	NEG_ALT_ERR_MSG_LENGTH equ $-NEG_ALT_ERR_MSG
@@ -27,6 +25,7 @@ section .data
 	; Name and altitude of the atmosphere's layers
 	TROPOSPHERE db "Troposphere", 0xA
 	TROPOSPHERE_LENGTH equ $-TROPOSPHERE
+	TROPOSPHERE_ALT equ 0
 
 	STRATOSPHERE db "Stratosphere", 0xA
 	STRATOSPHERE_LENGTH equ $-STRATOSPHERE
@@ -46,14 +45,12 @@ section .data
 
 section .text
 _start:
-	; Altitude (km)
-	mov eax, 0
-
 	; Comparison
-	cmp eax, 0
+	mov eax, altitude
+	cmp eax, TROPOSPHERE_ALT
+	jge troposphere
 
 	; Altitude invalid if < 0.
-	jge troposphere
 	mov eax, SYSCALL_WRITE
 	mov ebx, STDOUT
 	mov ecx, NEG_ALT_ERR_MSG
@@ -62,6 +59,10 @@ _start:
 	jmp endif
 
 troposphere:
+	mov eax, altitude
+	cmp eax, MESOSPHERE_ALT
+	jg mesosphere
+
 	mov eax, SYSCALL_WRITE
 	mov ebx, STDOUT
 	mov ecx, TROPOSPHERE
@@ -69,13 +70,43 @@ troposphere:
 	int 0x80
 	jmp endif
 
+mesosphere:
+	mov eax, altitude
+	cmp eax, THERMOSPHERE_ALT
+	jg thermosphere
+
+	mov eax, SYSCALL_WRITE
+	mov ebx, STDOUT
+	mov ecx, MESOSPHERE
+	mov edx, MESOSPHERE_LENGTH
+	int 0x80
+	jmp endif
+
+thermosphere:
+	mov eax, altitude
+	cmp eax, EXOSPHERE_ALT
+	jg exosphere
+
+	mov eax, SYSCALL_WRITE
+	mov ebx, STDOUT
+	mov ecx, THERMOSPHERE
+	mov edx, THERMOSPHERE_LENGTH
+	int 0x80
+	jmp endif
+
+exosphere:
+	mov eax, SYSCALL_WRITE
+	mov ebx, STDOUT
+	mov ecx, EXOSPHERE
+	mov edx, EXOSPHERE_LENGTH
+	int 0x80
+
 endif:
-	; Display the altitude
-	;mov eax, SYSCALL_WRITE
-	;mov ebx, STDOUT
-	;mov ecx, altitude
-	;mov edx, ALT_VAR_SIZE
-	;int 0x80
+;	mov eax, SYSCALL_WRITE
+;	mov ebx, STDOUT
+;	mov ecx, altitude
+;	mov edx, 2 ;ALT_VAR_SIZE
+;	int 0x80
 
 	; Exit
 	mov eax, SYSCALL_EXIT
