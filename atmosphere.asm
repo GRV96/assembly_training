@@ -47,13 +47,13 @@ section .data
 section .text
 _start:
 	; Altitude (km)
-	mov eax, 7
+	mov eax, 0
 
 	; Comparison
 	cmp eax, 0
 
 	; Altitude invalid if < 0.
-	jg troposphere
+	jge troposphere
 	mov eax, SYSCALL_WRITE
 	mov ebx, STDOUT
 	mov ecx, NEG_ALT_ERR_MSG
