@@ -28,7 +28,7 @@ _start:
 	mov edx, MAX_STR_LENGTH
 	int 0x80
 
-	; Tell the entered character.
+	; Tell the entered string.
 	mov eax, 4
 	mov ebx, 1
 	mov ecx, OUTPUT_MSG
