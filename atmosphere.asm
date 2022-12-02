@@ -7,9 +7,6 @@ section .data
 	NEG_ALT_ERR_MSG db "Error: altitude < 0 km", 0xA
 	NEG_ALT_ERR_MSG_LENGTH equ $-NEG_ALT_ERR_MSG
 
-	EXEC_END db "Execution ended.", 0xA
-	EXEC_END_LENGTH equ $-EXEC_END
-
 	NO_ERROR equ 0
 
 	STDIN equ 0
