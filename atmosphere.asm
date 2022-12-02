@@ -46,26 +46,14 @@ section .data
 
 section .text
 _start:
-	; Ask for the altitude.
-	mov eax, SYSCALL_WRITE
-	mov ebx, STDOUT
-	mov ecx, ALTITUDE_MSG
-	mov edx, ALTITUDE_MSG_LENGTH
-	int 0x80
-
-	; Read the altitude
-	mov eax, SYSCALL_READ
-	mov ebx, STDIN
-	mov ecx, altitude
-	mov edx, ALT_VAR_SIZE
-	int 0x80
+	; Altitude (km)
+	mov eax, 7
 
 	; Comparison
-	mov eax, altitude
 	cmp eax, 0
 
 	; Altitude invalid if < 0.
-	jl troposphere
+	jg troposphere
 	mov eax, SYSCALL_WRITE
 	mov ebx, STDOUT
 	mov ecx, NEG_ALT_ERR_MSG
@@ -80,8 +68,8 @@ troposphere:
 	mov edx, TROPOSPHERE_LENGTH
 	int 0x80
 	jmp endif
-endif:
 
+endif:
 	; Display the altitude
 	;mov eax, SYSCALL_WRITE
 	;mov ebx, STDOUT
