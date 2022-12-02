@@ -106,12 +106,6 @@ exosphere:
 	int 0x80
 
 endif:
-	mov eax, SYSCALL_WRITE
-	mov ebx, STDOUT
-	mov ecx, EXEC_END
-	mov edx, EXEC_END_LENGTH
-	int 0x80
-
 	; Exit
 	mov eax, SYSCALL_EXIT
 	mov ebx, NO_ERROR
