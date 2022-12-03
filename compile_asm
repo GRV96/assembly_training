@@ -31,6 +31,8 @@ function compile_asm_file
 	ld -m elf_i386 $object_file_path -o $no_extension
 
 	rm $object_file_path
+
+	echo $no_extension
 }
 
 until [ -z $1 ]; do
