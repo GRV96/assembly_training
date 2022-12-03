@@ -22,7 +22,7 @@ The executable files are run as follows.
 ./compile_asm hello_world.asm atmosphere.asm
 ```
 
-Alternatively, you can execute an assembly source file without leaving an
+Alternatively, you can execute an assembly program without leaving an
 executable by using bash script `exec_asm`. This one takes only one argument.
 Example:
 ```
